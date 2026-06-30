@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formação Continuada de Professores — Pesquisa de Mestrado</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #1a5c2e;
+    --verde-medio: #2d7a42;
+    --verde-claro: #4a9e5c;
+    --verde-suave: #e8f4eb;
+    --verde-borda: #b8ddc0;
+    --dourado: #c9a84c;
+    --dourado-claro: #e8d08a;
+    --cinza-escuro: #2a2a2a;
+    --cinza-medio: #555;
+    --cinza-claro: #f5f5f0;
+    --branco: #fdfcf8;
+    --sombra: 0 4px 24px rgba(26,92,46,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: linear-gradient(135deg, #f0f7f2 0%, #fdfcf8 50%, #f5f0e8 100%);
+    color: var(--cinza-escuro);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* PROGRESS BAR */
+  .progress-container {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--branco);
+    box-shadow: 0 2px 12px rgba(26,92,46,0.12);
+    padding: 10px 24px;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-family: 'Playfair Display', serif;
+  }
+  .progress-title {
+    font-size: 13px;
+    color: var(--verde);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .progress-step {
+    font-size: 12px;
+    color: var(--cinza-medio);
+  }
+  .progress-bar-outer {
+    height: 6px;
+    background: var(--verde-borda);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--verde), var(--dourado));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* STEPS */
+  .step-indicators {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 7px;
+    flex-wrap: wrap;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde-borda);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .step-dot.active { background: var(--verde); transform: scale(1.4); }
+  .step-dot.done { background: var(--dourado); }
+
+  /* CARD / PAGE */
+  .form-page {
+    display: none;
+    animation: fadeSlide 0.4s ease;
+  }
+  .form-page.active { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 100px 20px 40px;
+  }
+
+  .card {
+    background: var(--branco);
+    border-radius: 18px;
+    box-shadow: var(--sombra);
+    padding: 44px 48px;
+    border: 1px solid var(--verde-borda);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--verde), var(--dourado));
+  }
+
+  /* LOGO AREA */
+  .logos {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .logo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-img {
+    max-height: 72px;
+    max-width: 160px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.10));
+  }
+  .logo-placeholder {
+    width: 130px;
+    height: 60px;
+    background: var(--verde-suave);
+    border: 2px solid var(--verde-borda);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--verde-medio);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* TYPOGRAPHY */
+  .section-badge {
+    display: inline-block;
+    background: var(--verde-suave);
+    color: var(--verde);
+    border: 1px solid var(--verde-borda);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--verde);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--verde);
+    margin-bottom: 16px;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--verde-medio);
+    margin: 22px 0 10px;
+  }
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, var(--verde-borda), transparent);
+    margin: 22px 0;
+    border-radius: 1px;
+  }
+  p {
+    color: var(--cinza-medio);
+    margin-bottom: 12px;
+    text-align: justify;
+  }
+
+  /* FORM ELEMENTS */
+  label { display: block; font-weight: 600; color: var(--cinza-escuro); margin-bottom: 6px; font-size: 14px; }
+
+  input[type="text"], input[type="email"], input[type="date"], textarea, select {
+    width: 100%;
+    border: 1.5px solid var(--verde-borda);
+    border-radius: 10px;
+    padding: 11px 15px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    color: var(--cinza-escuro);
+    background: var(--branco);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    margin-bottom: 18px;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--verde-medio);
+    box-shadow: 0 0 0 3px rgba(45,122,66,0.10);
+  }
+  textarea { min-height: 90px; resize: vertical; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } .card { padding: 28px 18px; } }
+
+  /* RADIO LIKERT */
+  .likert-group { margin: 16px 0 20px; }
+  .likert-group label.group-label { font-size: 15px; margin-bottom: 12px; color: var(--cinza-escuro); }
+  .likert-options { display: flex; flex-direction: column; gap: 8px; }
+  .likert-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--verde-suave);
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+  .likert-option:hover { border-color: var(--verde-medio); background: #d6eddb; }
+  .likert-option input[type="radio"] { display: none; }
+  .likert-option.selected { border-color: var(--verde); background: #c6e6ce; font-weight: 600; }
+  .likert-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--verde-medio);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .likert-option.selected .likert-dot { background: var(--verde); border-color: var(--verde); }
+  .likert-option.selected .likert-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
+
+  /* CHECKBOX TABLE */
+  .table-wrapper { overflow-x: auto; margin: 12px 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: var(--verde); color: white; }
+  thead th { padding: 10px 14px; text-align: center; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 13px; }
+  thead th:first-child { text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--verde-borda); transition: background 0.15s; }
+  tbody tr:hover { background: var(--verde-suave); }
+  tbody td { padding: 10px 14px; }
+  tbody td:not(:first-child) { text-align: center; }
+  .check-cell { cursor: pointer; }
+  .check-cell input[type="radio"] { display: none; }
+  .check-visual {
+    width: 22px; height: 22px;
+    border: 2px solid var(--verde-borda);
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .check-visual.checked { background: var(--verde); border-color: var(--verde); }
+  .check-visual.checked::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
+
+  /* BUTTONS */
+  .btn-row { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 32px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 0.04em;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    color: white;
+    box-shadow: 0 4px 16px rgba(26,92,46,0.25);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(26,92,46,0.35); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--verde);
+    border: 2px solid var(--verde-borda);
+  }
+  .btn-secondary:hover { background: var(--verde-suave); }
+  .btn-accept {
+    background: linear-gradient(135deg, var(--dourado), #a8832a);
+    color: white;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+  }
+  .btn-accept:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(201,168,76,0.45); }
+
+  /* FINAL PAGE */
+  .final-box {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .final-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 36px;
+    box-shadow: 0 8px 30px rgba(26,92,46,0.30);
+  }
+
+  /* ALERT */
+  .alert-box {
+    background: var(--verde-suave);
+    border-left: 4px solid var(--verde);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--verde);
+  }
+
+  .required-note { font-size: 12px; color: #999; margin-bottom: 20px; font-style: italic; }
+  .campo-erro { border: 2px solid #e53935 !important; background-color: #fff5f5; }
+
+  .area-check-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .area-chip {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--verde-borda);
+    background: var(--branco);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .area-chip:hover { border-color: var(--verde-medio); background: var(--verde-suave); }
+  .area-chip.selected { background: var(--verde); color: white; border-color: var(--verde); }
+  .area-chip input { display: none; }
+
+  .outro-field { display: none; margin-top: 8px; }
+  .outro-field.show { display: block; }
+
+  /* ===== TELA DE ABERTURA / LOGIN / SOLICITAÇÃO ===== */
+  .gate-page { display: none; }
+  .gate-page.active { display: block; }
+  .gate-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 60px 20px 40px;
+  }
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    border: 1.5px solid var(--verde-borda);
+    background: #000;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+  .badge-restrito {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--dourado-claro);
+    color: #6b5414;
+    border: 1px solid var(--dourado);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .gate-choice-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .gate-choice-row .btn { flex: 1; min-width: 200px; }
+  .token-input {
+    text-align: center;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: 'Playfair Display', serif;
+  }
+  .login-erro {
+    display: none;
+    background: #fbeaea;
+    border-left: 4px solid #c0392b;
+    color: #a8302a;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .login-erro.show { display: block; }
+  .solicitar-sucesso {
+    display: none;
+    background: var(--verde-suave);
+    border-left: 4px solid var(--verde);
+    color: var(--verde);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .solicitar-sucesso.show { display: block; }
+  .vagas-encerradas {
+    display: none;
+    background: var(--cinza-claro);
+    border-left: 4px solid var(--cinza-medio);
+    color: var(--cinza-medio);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .vagas-encerradas.show { display: block; }
+  .link-voltar {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--verde-medio);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .autosave-indicator {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    background: var(--verde);
+    color: white;
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    box-shadow: var(--sombra);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 200;
+    font-family: 'Playfair Display', serif;
+  }
+  .autosave-indicator.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TELA 0: ABERTURA PÚBLICA (vídeo + escolha de caminho)
+============================================================ -->
+<div class="gate-page active" id="gate-abertura">
+  <div class="gate-container">
+    <div class="card">
+      <div class="logos">
+        <div class="logo-box">
+          <img src="https://drive.google.com/thumbnail?id=1Z90MJJtX1AzoBfa5jHkY8uuSSOecZYDN&sz=w300" alt="Logo UENP" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-placeholder" style="display:none">UENP</div>
+        </div>
+        <div class="logo-box">
+          <img src="https://drive.google.com/thumbnail?id=1TJ2j48uc8Zr_w5dx_iwpNAUsXvSdrEWZ&sz=w300" alt="Logo PPGEn" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-placeholder" style="display:none">PPGEn</div>
+        </div>
+      </div>
+      <div class="section-badge">Pesquisa de Mestrado</div>
+      <h1>Instrumento de Validação Preliminar de Produto Educacional por Pares Especialistas</h1>
+      <div class="divider"></div>
+      <p>Antes de prosseguir, assista a um breve vídeo de apresentação da pesquisa, com seus objetivos e o que será solicitado de quem participar.</p>
+
+      <!-- Substitua o "SEU_ID_DO_VIDEO" abaixo pelo ID do vídeo do YouTube (não listado, se preferir) -->
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/SEU_ID_DO_VIDEO" title="Apresentação da pesquisa" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <p>Esta pesquisa tem vagas limitadas a 30 participantes. Quem já recebeu um código de acesso pode entrar diretamente. Professores interessados que ainda não possuem código podem solicitar participação.</p>
+
+      <div class="gate-choice-row">
+        <button class="btn btn-primary" onclick="mostrarGate('gate-login')">Já tenho meu código de acesso →</button>
+        <button class="btn btn-secondary" onclick="mostrarGate('gate-solicitar')">Quero participar da pesquisa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TELA 1: LOGIN POR TOKEN
+============================================================ -->
+<div class="gate-page" id="gate-login">
+  <div class="gate-container">
+    <div class="card">
+      <div class="logos">
+        <div class="logo-box">
+          <img src="https://drive.google.com/thumbnail?id=1Z90MJJtX1AzoBfa5jHkY8uuSSOecZYDN&sz=w300" alt="Logo UENP" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-placeholder" style="display:none">UENP</div>
+        </div>
+        <div class="logo-box">
+          <img src="https://drive.google.com/thumbnail?id=1TJ2j48uc8Zr_w5dx_iwpNAUsXvSdrEWZ&sz=w300" alt="Logo PPGEn" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-placeholder" style="display:none">PPGEn</div>
+        </div>
+      </div>
+      <div class="badge-restrito">🔒 Acesso Restrito</div>
+      <h1>Acesso ao Formulário de Avaliação</h1>
+      <div class="divider"></div>
+      <p>Este formulário é destinado exclusivamente aos participantes selecionados para esta pesquisa. Informe abaixo o código de acesso que você recebeu da pesquisadora por e-mail.</p>
+
+      <div class="login-erro" id="loginErro"></div>
+
+      <label for="login-token">Código de Acesso</label>
+      <input type="text" id="login-token" class="token-input" placeholder="PESQ-XXXXXX" maxlength="14">
+
+      <div class="btn-row" style="justify-content:flex-end">
+        <button class="btn btn-primary" id="btnEntrar" onclick="fazerLogin()">Entrar →</button>
+      </div>
+
+      <div class="alert-box" style="margin-top:24px">
+        Perdeu ou não recebeu seu código? Entre em contato com o pesquisador: <a href="mailto:pedro.navi@discente.uenp.edu.br" style="color:var(--verde)">pedro.navi@discente.uenp.edu.br</a>
+      </div>
+
+      <span class="link-voltar" onclick="mostrarGate('gate-abertura')">← Voltar</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TELA 2: SOLICITAÇÃO DE PARTICIPAÇÃO
+============================================================ -->
+<div class="gate-page" id="gate-solicitar">
+  <div class="gate-container">
+    <div class="card">
+      <div class="section-badge">Solicitar Participação</div>
+      <h1>Quero participar da pesquisa</h1>
+      <div class="divider"></div>
+      <p>Esta pesquisa é destinada a professores que atuam na formação docente, com vagas limitadas a 30 participantes. Preencha seus dados abaixo e a pesquisadora avaliará seu perfil para envio do código de acesso.</p>
+
+      <div class="solicitar-sucesso" id="solicitarSucesso"></div>
+      <div class="vagas-encerradas" id="vagasEncerradas">No momento, todas as 30 vagas desta pesquisa já foram preenchidas. Obrigado pelo interesse — caso surjam novas vagas, entraremos em contato pelos canais informados.</div>
+
+      <div id="solicitarFormArea">
+        <label for="sol-nome">Nome completo <span style="color:#c0392b">*</span></label>
+        <input type="text" id="sol-nome" placeholder="Seu nome completo">
+
+        <label for="sol-email">E-mail <span style="color:#c0392b">*</span></label>
+        <input type="email" id="sol-email" placeholder="seu@email.com">
+
+        <label for="sol-instituicao">Instituição / Rede de ensino</label>
+        <input type="text" id="sol-instituicao" placeholder="Onde você atua">
+
+        <label for="sol-tempo">Tempo de atuação na formação de professores</label>
+        <input type="text" id="sol-tempo" placeholder="Ex.: 10 anos">
+
+        <div class="btn-row" style="justify-content:flex-end">
+          <button class="btn btn-accept" id="btnSolicitar" onclick="enviarSolicitacao()">Enviar Solicitação</button>
+        </div>
+      </div>
+
+      <span class="link-voltar" onclick="mostrarGate('gate-abertura')">← Voltar</span>
+    </div>
+  </div>
+</div>
+
+<!-- Indicador de salvamento automático -->
+<div class="autosave-indicator" id="autosaveIndicator">Progresso salvo ✓</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-container" id="progressContainer" style="display:none">
+  <div class="progress-header">
+    <span class="progress-title">Formação Continuada — Anos Iniciais do Ensino Fundamental</span>
+    <span class="progress-step" id="stepLabel">Etapa 1 de 9</span>
+  </div>
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progressBar" style="width:8.3%"></div>
+  </div>
+  <div class="step-indicators" id="stepDots"></div>
+</div>
+
+<div class="container" id="formContainer" style="display:none">
+
+  <!-- PAGE 1: APRESENTAÇÃO -->
+  <div class="form-page active" id="page-1">
+    <div class="card">
+      <div class="logos">
+        <div class="logo-box">
+          <img src="https://drive.google.com/thumbnail?id=1Z90MJJtX1AzoBfa5jHkY8uuSSOecZYDN&sz=w300" alt="Logo UENP" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-placeholder" style="display:none">UENP</div>
+        </div>
+        <div class="logo-box">
+          <img src="https://drive.google.com/thumbnail?id=1TJ2j48uc8Zr_w5dx_iwpNAUsXvSdrEWZ&sz=w300" alt="Logo PPGEn" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-placeholder" style="display:none">PPGEn</div>
+        </div>
+      </div>
+      <div class="section-badge">Apresentação</div>
+      <h1>Formação Continuada de Professores dos Anos Iniciais do Ensino Fundamental: uma Proposta Teórico-Prática</h1>
+      <div class="divider"></div>
+      <p>Prezado(a) professor(a),</p>
+      <p>Esta pesquisa está associada ao projeto de Mestrado de <strong>Pedro Ricieri Navi Junior</strong>, desenvolvida sob orientação da <strong>Professora Dra. Roberta Negrão de Araújo</strong>, no Programa de Pós-Graduação em Ensino (PPGEn) da Universidade Estadual do Norte do Paraná — Campus de Cornélio Procópio (UENP).</p>
+      <p>O objetivo da pesquisa é desenvolver um produto educacional em forma de guia didático que sirva como referência para a Secretaria Municipal de Educação de Santo Antônio da Platina na organização e oferta de ações formativas para a prática pedagógica nos anos iniciais do Ensino Fundamental.</p>
+      <p>Você será convidado(a) a responder a um questionário on-line misto, com questões abertas e fechadas, sobre suas experiências relacionadas à formação continuada no município de Santo Antônio da Platina. O tempo estimado de preenchimento é de aproximadamente 30 minutos, e sua participação ocorrerá exclusivamente por meio digital, em horário de sua conveniência.</p>
+      <p>Para fins de divulgação e análise da pesquisa, seus dados serão tratados de forma confidencial e identificados apenas por um código alfanumérico — seu nome completo será solicitado apenas no Termo de Consentimento, como forma de confirmar formalmente seu aceite em participar, e seu uso é restrito ao pesquisador e à orientadora.</p>
+      <p>Antes do preenchimento, é necessário que você leia o Termo de Consentimento Livre e Esclarecido (TCLE) e confirme sua concordância em participar. A qualquer momento, a autorização de uso dos dados pode ser retirada, sem qualquer prejuízo pessoal ou profissional.</p>
+      <p>O formulário pode ser preenchido em mais de uma sessão: caso precise interromper, seu progresso fica salvo e você pode retornar mais tarde utilizando o mesmo código de acesso.</p>
+      <div class="alert-box">O pesquisador agradece imensamente sua colaboração.</div>
+      <div class="btn-row" style="justify-content:flex-end">
+        <button class="btn btn-primary" onclick="goTo(2)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: TCLE -->
+  <div class="form-page" id="page-2">
+    <div class="card">
+      <div class="section-badge">TCLE</div>
+      <h1>Termo de Consentimento Livre e Esclarecido</h1>
+      <div class="divider"></div>
+      <p>Esta pesquisa está associada ao projeto de Mestrado de Pedro Ricieri Navi Junior, RG: 8.393.210-4, CPF: 044.975.179-18, telefone: (43) 99923-6942, e-mail: <a href="mailto:pedro.navi@discente.uenp.edu.br" style="color:var(--verde)">pedro.navi@discente.uenp.edu.br</a>, endereço: Rua José Joaquim Magalhães, nº 43, Jardim São Pedro II, Santo Antônio da Platina – PR, CEP: 86430-000, desenvolvida sob orientação da professora Dra. Roberta Negrão de Araújo, no Programa de Pós-Graduação em Ensino (PPGEn) da Universidade Estadual do Norte do Paraná – Campus de Cornélio Procópio (UENP).</p>
+      <p>A pesquisa, cujo título é <em>"Formação Continuada de Professores dos Anos Iniciais do Ensino Fundamental: uma Proposta Teórico-Prática"</em>, tem como objetivo desenvolver um produto educacional em forma de guia didático que sirva como referência para a Secretaria Municipal de Educação de Santo Antônio da Platina na organização e oferta de ações formativas para a prática pedagógica nos anos iniciais do Ensino Fundamental. O desenvolvimento da pesquisa ocorrerá nos anos letivos de 2026 e 2027, após as autorizações institucionais cabíveis.</p>
+      <p><strong>Procedimentos de coleta de dados:</strong> Você será convidado(a) a participar respondendo a um questionário on-line misto, com questões abertas e fechadas, sobre suas experiências relacionadas à formação continuada no município de Santo Antônio da Platina. O tempo estimado de preenchimento é de 30 minutos. Sua participação ocorrerá exclusivamente por meio digital, em horário de sua conveniência.</p>
+      <p>Durante a realização da pesquisa, sua participação é voluntária e você poderá interrompê-la a qualquer momento, sem qualquer prejuízo pessoal ou profissional.</p>
+      <h3>Riscos e medidas de mitigação</h3>
+      <p>A participação nesta pesquisa apresenta riscos considerados mínimos: a) risco de quebra de sigilo/confidencialidade, com vazamento não intencional de informações pessoais e acadêmicas coletadas em ambiente on-line; b) risco de constrangimento ou desconforto emocional ao relatar experiências da formação continuada; c) risco relacionado ao ambiente on-line, como instabilidade de conexão e fadiga de tela.</p>
+      <p>Para mitigar esses riscos: a) todos os participantes serão identificados por códigos alfanuméricos, sem vinculação com nome, CPF ou e-mail; b) as respostas serão armazenadas em dispositivo com senha, com acesso restrito ao pesquisador e à orientadora, por 5 anos, sendo destruídas após esse período; c) é garantido o direito de não responder a qualquer pergunta e de retirar o consentimento a qualquer momento; d) o formulário poderá ser preenchido em mais de uma sessão e em horário escolhido por você.</p>
+      <h3>Benefícios</h3>
+      <p>Benefícios diretos: a) espaço de escuta e reflexão sobre suas práticas pedagógicas; b) acesso ao Guia de Formação Continuada elaborado para a realidade da rede municipal. Benefícios indiretos: a) diagnóstico para a SME sobre necessidades formativas; b) contribuição para a melhoria da qualidade do ensino nos Anos Iniciais.</p>
+      <h3>Custos, ressarcimento e indenização</h3>
+      <p>Sua participação não acarretará custos. Caso você tenha qualquer despesa comprovadamente decorrente da participação nesta pesquisa, como gastos com internet para acesso ao formulário ou deslocamento para uso de equipamento, fica assegurado o ressarcimento integral pelo pesquisador responsável, mediante apresentação de comprovante. É garantido também o direito de buscar indenização por meio das vias judiciais, nos termos da lei, caso você sofra qualquer tipo de dano material ou imaterial decorrente da participação nesta pesquisa.</p>
+      <p><strong>Dúvidas éticas e denúncias:</strong> Caso você tenha dúvidas, queixas ou denúncias de natureza ética sobre esta pesquisa, poderá entrar em contato com o Comitê de Ética em Pesquisa da UENP – CEP/UENP, localizado na Rod. BR 369, Km 54, Bandeirantes-PR, CEP 86360-000, Caixa Postal 261, telefone (43) 3542-8056, e-mail: <a href="mailto:cep@uenp.edu.br" style="color:var(--verde)">cep@uenp.edu.br</a>. Horário de funcionamento: segunda a sexta-feira, das 7h30 às 12h e das 13h30 às 17h.</p>
+      <p><strong>Contato do pesquisador:</strong> Pedro Ricieri Navi Junior, telefone (43) 99923-6942, e-mail: <a href="mailto:pedro.navi@discente.uenp.edu.br" style="color:var(--verde)">pedro.navi@discente.uenp.edu.br</a>. <strong>Orientadora:</strong> Profa. Dra. Roberta Negrão de Araújo, telefone (43) 98404-1221, e-mail: <a href="mailto:robertanegrao@uenp.edu.br" style="color:var(--verde)">robertanegrao@uenp.edu.br</a>.</p>
+      <div class="divider"></div>
+      <p>Para confirmação formal do seu aceite em participar da pesquisa, solicitamos seu nome completo abaixo. Essa informação é de uso exclusivo do pesquisador e da orientadora, para fins de registro do consentimento, e não será associada às suas respostas na divulgação dos resultados — na publicação e análise da pesquisa, sua participação será identificada apenas pelo código alfanumérico de acesso, conforme garantido neste TCLE.</p>
+      <label for="tcle-nome">Seu nome completo <span style="color:#c0392b">*</span></label>
+      <input type="text" id="tcle-nome" placeholder="Digite seu nome completo">
+      <div class="alert-box">
+        Ao clicar em "Aceitar e Continuar", você confirma que leu e compreendeu os termos acima e concorda, de forma livre e esclarecida, em participar desta pesquisa, sabendo que suas respostas serão tratadas de forma anônima e identificadas apenas por um código alfanumérico.
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(1)">← Voltar</button>
+        <button class="btn btn-accept" onclick="aceitarTCLE()">✓ Aceitar e Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: IDENTIFICAÇÃO (não-identificável) -->
+  <div class="form-page" id="page-3">
+    <div class="card">
+      <div class="section-badge">Identificação</div>
+      <h1>Formação Continuada de Professores dos Anos Iniciais</h1>
+      <h2>Sondagem diagnóstica e percepções sobre a formação continuada na rede municipal de Santo Antônio da Platina</h2>
+      <div class="divider"></div>
+      <p>As informações abaixo são utilizadas apenas para fins de caracterização do grupo de participantes na análise da pesquisa, e não são associadas ao seu nome na divulgação dos resultados.</p>
+      <div class="divider"></div>
+      <p class="required-note">* Campos obrigatórios</p>
+      <label for="ident-tempo">Tempo de atuação na docência dos Anos Iniciais do Ensino Fundamental <span style="color:#c0392b">*</span></label>
+      <input type="text" id="ident-tempo" placeholder="Ex.: 8 anos">
+      <label for="ident-anoturma">Ano/turma que leciona atualmente <span style="color:#c0392b">*</span></label>
+      <input type="text" id="ident-anoturma" placeholder="Ex.: 3º ano">
+      <label for="ident-formacao">Formação acadêmica <span style="color:#c0392b">*</span></label>
+      <input type="text" id="ident-formacao" placeholder="Ex.: Pedagogia, Normal Superior...">
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(2)">← Voltar</button>
+        <button class="btn btn-primary" onclick="validarIdentificacao()">Próxima Seção →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: BLOCO A — SUB-BLOCO 1: SABERES DA FORMAÇÃO PROFISSIONAL -->
+  <div class="form-page" id="page-4">
+    <div class="card">
+      <div class="section-badge">Bloco A · 1 de 4</div>
+      <h1>Sondagem Diagnóstica — Saberes da Formação Profissional</h1>
+      <div class="divider"></div>
+      <h3>Desafios no planejamento de aulas</h3>
+      <p>Quais são os maiores desafios que você encontra ao planejar suas aulas para atender à diversidade de níveis de aprendizagem na mesma turma?</p>
+      <textarea id="a1q1" placeholder="Descreva os principais desafios..."></textarea>
+      <div class="divider"></div>
+      <h3>Formações da SME e técnicas de avaliação</h3>
+      <p>Em uma escala de 1 a 5, quanto você sente que as formações oferecidas pela Secretaria Municipal de Educação (SME) auxiliam na melhoria de suas técnicas de avaliação?</p>
+      <div class="likert-group">
+        <div class="likert-options">
+          <label class="likert-option" onclick="selectLikert(this,'a1q2','5')"><input type="radio" name="a1q2" value="5"><div class="likert-dot"></div>(5) Ajudam muitíssimo</label>
+          <label class="likert-option" onclick="selectLikert(this,'a1q2','4')"><input type="radio" name="a1q2" value="4"><div class="likert-dot"></div>(4) Ajudam bastante</label>
+          <label class="likert-option" onclick="selectLikert(this,'a1q2','3')"><input type="radio" name="a1q2" value="3"><div class="likert-dot"></div>(3) Ajudam moderadamente</label>
+          <label class="likert-option" onclick="selectLikert(this,'a1q2','2')"><input type="radio" name="a1q2" value="2"><div class="likert-dot"></div>(2) Ajudam pouco</label>
+          <label class="likert-option" onclick="selectLikert(this,'a1q2','1')"><input type="radio" name="a1q2" value="1"><div class="likert-dot"></div>(1) Não ajudam</label>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <h3>Metodologias de interesse</h3>
+      <p>Quais metodologias de ensino você gostaria de dominar melhor para aplicar em sala de aula (ex.: ensino híbrido, projetos, ludicidade)?</p>
+      <textarea id="a1q3" placeholder="Descreva as metodologias de seu interesse..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(3)">← Voltar</button>
+        <button class="btn btn-primary" onclick="validarSecaoA1()">Próxima Seção →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 5: BLOCO A — SUB-BLOCO 2: SABERES DISCIPLINARES -->
+  <div class="form-page" id="page-5">
+    <div class="card">
+      <div class="section-badge">Bloco A · 2 de 4</div>
+      <h1>Sondagem Diagnóstica — Saberes Disciplinares</h1>
+      <div class="divider"></div>
+      <h3>Aprofundamento teórico por componente curricular</h3>
+      <p>Dentre os componentes curriculares (ex.: Matemática, Língua Portuguesa, Ciências), você sente necessidade de maior aprofundamento teórico? Se sim, qual(is)?</p>
+      <textarea id="a2q1" placeholder="Indique o(s) componente(s) curricular(es)..."></textarea>
+      <div class="divider"></div>
+      <h3>Suficiência do material didático</h3>
+      <p>Você considera que o material didático disponível na rede municipal é suficiente para o ensino dos conteúdos exigidos para o ano em que você leciona?</p>
+      <textarea id="a2q2" placeholder="Justifique sua resposta..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(4)">← Voltar</button>
+        <button class="btn btn-primary" onclick="validarSecaoA2()">Próxima Seção →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 6: BLOCO A — SUB-BLOCO 3: SABERES CURRICULARES -->
+  <div class="form-page" id="page-6">
+    <div class="card">
+      <div class="section-badge">Bloco A · 3 de 4</div>
+      <h1>Sondagem Diagnóstica — Saberes Curriculares</h1>
+      <div class="divider"></div>
+      <h3>Documentos norteadores do ensino</h3>
+      <p>Você conhece os documentos que norteiam o ensino nos anos iniciais (BNCC, Currículo Municipal ou o Projeto Pedagógico da Escola)? Como você se sente ao ter que consultá-los para planejar?</p>
+      <textarea id="a3q1" placeholder="Descreva sua relação com esses documentos..."></textarea>
+      <div class="divider"></div>
+      <h3>Articulação entre currículo e prática</h3>
+      <p>Você se sente segura(o) no que se refere à articulação entre os objetivos de aprendizagem do currículo municipal com a sua prática diária? Justifique.</p>
+      <textarea id="a3q2" placeholder="Sua justificativa..."></textarea>
+      <div class="divider"></div>
+      <h3>Adaptação da BNCC à realidade local</h3>
+      <p>Quais dificuldades você enfrenta ao tentar adaptar o que está proposto na BNCC à realidade local de Santo Antônio da Platina?</p>
+      <textarea id="a3q3" placeholder="Descreva as dificuldades..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(5)">← Voltar</button>
+        <button class="btn btn-primary" onclick="validarSecaoA3()">Próxima Seção →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 7: BLOCO A — SUB-BLOCO 4: SABERES EXPERIENCIAIS -->
+  <div class="form-page" id="page-7">
+    <div class="card">
+      <div class="section-badge">Bloco A · 4 de 4</div>
+      <h1>Sondagem Diagnóstica — Saberes Experienciais</h1>
+      <div class="divider"></div>
+      <h3>Troca de experiências entre pares</h3>
+      <p>Com que frequência você tem a oportunidade de compartilhar experiências bem-sucedidas ou dilemas pedagógicos com seus colegas durante o horário de trabalho?</p>
+      <textarea id="a4q1" placeholder="Descreva a frequência e como isso ocorre..."></textarea>
+      <div class="divider"></div>
+      <h3>Formações pontuais x troca entre pares</h3>
+      <p>Como você avalia o impacto das formações "pontuais" (palestras isoladas) no seu cotidiano escolar em comparação com momentos de troca entre pares?</p>
+      <textarea id="a4q2" placeholder="Compare os dois formatos..."></textarea>
+      <div class="divider"></div>
+      <h3>Valorização da experiência prática</h3>
+      <p>De que maneira a SME poderia valorizar mais o conhecimento que você já adquiriu através da sua experiência prática em sala de aula?</p>
+      <textarea id="a4q3" placeholder="Suas sugestões..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(6)">← Voltar</button>
+        <button class="btn btn-primary" onclick="validarSecaoA4()">Próxima Seção →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 8: BLOCO B — PERCEPÇÕES E EXPECTATIVAS -->
+  <div class="form-page" id="page-8">
+    <div class="card">
+      <div class="section-badge">Bloco B</div>
+      <h1>Percepções e Expectativas sobre a Formação Continuada</h1>
+      <div class="divider"></div>
+      <h3>1. Função da formação continuada</h3>
+      <p>Qual a função da formação continuada para o exercício diário da docência?</p>
+      <textarea id="b1" placeholder="Sua resposta..."></textarea>
+      <div class="divider"></div>
+      <h3>2. Contribuição para a prática em sala de aula</h3>
+      <p>De que maneira a formação continuada poderia ajudar nas práticas que você realiza em sala de aula?</p>
+      <textarea id="b2" placeholder="Sua resposta..."></textarea>
+      <div class="divider"></div>
+      <h3>3. Dificuldades observadas nas formações continuadas</h3>
+      <p>Pensando nas formações ofertadas nos últimos anos: aponte as principais dificuldades ou desafios que você observou.</p>
+      <textarea id="b3" placeholder="Sua resposta..."></textarea>
+      <div class="divider"></div>
+      <h3>4. Mudanças e melhorias sugeridas</h3>
+      <p>Indique mudanças (ou melhorias) para a formação continuada que poderiam torná-la mais significativa e, assim, contribuir ainda mais para sua atuação.</p>
+      <textarea id="b4" placeholder="Sua resposta..."></textarea>
+      <div class="divider"></div>
+      <h3>5. Contribuições para a prática pedagógica</h3>
+      <p>Quais contribuições a formação continuada pode trazer para sua prática pedagógica?</p>
+      <textarea id="b5" placeholder="Sua resposta..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(7)">← Voltar</button>
+        <button class="btn btn-accept" onclick="validarSecaoBEEnviar()">✓ Enviar Respostas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 9: FINAL -->
+  <div class="form-page" id="page-9">
+    <div class="card">
+      <div class="final-box">
+        <div class="final-icon">✓</div>
+        <h1>Respostas Enviadas com Sucesso!</h1>
+        <div class="divider"></div>
+        <p style="font-size:15px;text-align:center;margin-top:8px">Agradeço imensamente sua contribuição para este trabalho de mestrado.</p>
+        <div class="alert-box" style="text-align:left;margin-top:24px">
+          <strong>Pedro Ricieri Navi Junior</strong><br>
+          Mestrando — PPGEn / UENP<br>
+          <a href="mailto:pedro.navi@discente.uenp.edu.br" style="color:var(--verde)">pedro.navi@discente.uenp.edu.br</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+
+<script>
+  const TOTAL_PAGES = 9;
+  let currentPage = 1;
+  let tableSelections = {};
+
+  /* ============================================================
+     CONFIGURAÇÃO — URL do Web App do Apps Script (Code.gs)
+     Substitua pela URL gerada em Implantar > Nova implantação
+  ============================================================ */
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzYBC8djHIT_gZuLV-Z-jLNPLDRPVmtniGSMrl4juFGkwRLpOTEvqGsxlySS1j9OCtmJw/exec';
+
+  let currentToken = sessionStorage.getItem('pesquisa_token') || null;
+  let participanteId = sessionStorage.getItem('pesquisa_participante') || null;
+
+  /* ============================================================
+     NAVEGAÇÃO ENTRE TELAS DE ABERTURA (vídeo / login / solicitar)
+  ============================================================ */
+  function mostrarGate(idGate) {
+    document.querySelectorAll('.gate-page').forEach(g => g.classList.remove('active'));
+    document.getElementById(idGate).classList.add('active');
+    if (idGate === 'gate-solicitar') checarVagasDisponiveis();
+  }
+
+  /* ============================================================
+     LOGIN POR TOKEN
+  ============================================================ */
+  async function fazerLogin() {
+    const tokenInput = document.getElementById('login-token');
+    const erroBox = document.getElementById('loginErro');
+    const btn = document.getElementById('btnEntrar');
+    const token = tokenInput.value.trim().toUpperCase();
+
+    erroBox.classList.remove('show');
+
+    if (!token) {
+      erroBox.textContent = 'Informe o código de acesso.';
+      erroBox.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Verificando...';
+
+    try {
+      const resp = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'login', token: token })
+      });
+      const resultado = await resp.json();
+
+      if (!resultado.ok) {
+        erroBox.textContent = resultado.erro || 'Não foi possível validar o código.';
+        erroBox.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Entrar →';
+        return;
+      }
+
+      currentToken = token;
+      participanteId = resultado.participanteId;
+      sessionStorage.setItem('pesquisa_token', currentToken);
+      sessionStorage.setItem('pesquisa_participante', participanteId);
+
+      document.querySelectorAll('.gate-page').forEach(g => g.classList.remove('active'));
+      document.getElementById('progressContainer').style.display = 'block';
+      document.getElementById('formContainer').style.display = 'block';
+
+      if (resultado.respostasSalvas) {
+        restaurarRespostas(resultado.respostasSalvas);
+      }
+
+    } catch (err) {
+      erroBox.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
+      erroBox.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Entrar →';
+  }
+
+  /* ============================================================
+     SOLICITAÇÃO DE PARTICIPAÇÃO
+  ============================================================ */
+  async function checarVagasDisponiveis() {
+    try {
+      const resp = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'statusVagas' })
+      });
+      const resultado = await resp.json();
+      if (resultado.ok && resultado.vagasDisponiveis <= 0) {
+        document.getElementById('vagasEncerradas').classList.add('show');
+        document.getElementById('solicitarFormArea').style.display = 'none';
+      }
+    } catch (err) {
+      // Falha silenciosa: mantém o formulário disponível mesmo se a checagem falhar
+    }
+  }
+
+  async function enviarSolicitacao() {
+    const nome = document.getElementById('sol-nome').value.trim();
+    const email = document.getElementById('sol-email').value.trim();
+    const instituicao = document.getElementById('sol-instituicao').value.trim();
+    const tempo = document.getElementById('sol-tempo').value.trim();
+    const btn = document.getElementById('btnSolicitar');
+    const sucessoBox = document.getElementById('solicitarSucesso');
+
+    if (!nome || !email) {
+      alert('Por favor, preencha nome e e-mail.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      const resp = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          action: 'solicitar',
+          nome: nome,
+          email: email,
+          instituicao: instituicao,
+          tempoAtuacao: tempo
+        })
+      });
+      const resultado = await resp.json();
+
+      if (resultado.ok) {
+        sucessoBox.textContent = resultado.mensagem || 'Solicitação enviada com sucesso!';
+        sucessoBox.classList.add('show');
+        document.getElementById('solicitarFormArea').style.display = 'none';
+      } else {
+        alert(resultado.erro || 'Não foi possível enviar a solicitação.');
+      }
+    } catch (err) {
+      alert('Erro de conexão. Tente novamente em instantes.');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Enviar Solicitação';
+  }
+
+  /* ============================================================
+     AUTOSAVE — chamado a cada mudança de seção
+  ============================================================ */
+  let autosaveTimeout = null;
+  async function autosave() {
+    if (!currentToken) return;
+    const respostas = coletarRespostas();
+    try {
+      const resp = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          action: 'autosave',
+          token: currentToken,
+          participanteId: participanteId,
+          respostas: respostas
+        })
+      });
+      const resultado = await resp.json();
+      if (resultado.ok) mostrarIndicadorAutosave();
+    } catch (err) {
+      // Falha silenciosa: não interrompe a navegação do usuário
+    }
+  }
+
+  function mostrarIndicadorAutosave() {
+    const ind = document.getElementById('autosaveIndicator');
+    ind.classList.add('show');
+    clearTimeout(autosaveTimeout);
+    autosaveTimeout = setTimeout(() => ind.classList.remove('show'), 2000);
+  }
+
+  /* ============================================================
+     COLETA E RESTAURAÇÃO DE RESPOSTAS
+  ============================================================ */
+  function coletarRespostas() {
+    return {
+      tcle_nome: document.getElementById('tcle-nome').value,
+      ident_tempo: document.getElementById('ident-tempo').value,
+      ident_anoturma: document.getElementById('ident-anoturma').value,
+      ident_formacao: document.getElementById('ident-formacao').value,
+
+      a1q1: document.getElementById('a1q1').value,
+      a1q2: document.querySelector('input[name="a1q2"]:checked')?.value || '',
+      a1q3: document.getElementById('a1q3').value,
+
+      a2q1: document.getElementById('a2q1').value,
+      a2q2: document.getElementById('a2q2').value,
+
+      a3q1: document.getElementById('a3q1').value,
+      a3q2: document.getElementById('a3q2').value,
+      a3q3: document.getElementById('a3q3').value,
+
+      a4q1: document.getElementById('a4q1').value,
+      a4q2: document.getElementById('a4q2').value,
+      a4q3: document.getElementById('a4q3').value,
+
+      b1: document.getElementById('b1').value,
+      b2: document.getElementById('b2').value,
+      b3: document.getElementById('b3').value,
+      b4: document.getElementById('b4').value,
+      b5: document.getElementById('b5').value,
+    };
+  }
+
+  function restaurarRespostas(r) {
+    const campos = {
+      'tcle-nome': r.tcle_nome,
+      'ident-tempo': r.ident_tempo, 'ident-anoturma': r.ident_anoturma, 'ident-formacao': r.ident_formacao,
+      'a1q1': r.a1q1, 'a1q3': r.a1q3,
+      'a2q1': r.a2q1, 'a2q2': r.a2q2,
+      'a3q1': r.a3q1, 'a3q2': r.a3q2, 'a3q3': r.a3q3,
+      'a4q1': r.a4q1, 'a4q2': r.a4q2, 'a4q3': r.a4q3,
+      'b1': r.b1, 'b2': r.b2, 'b3': r.b3, 'b4': r.b4, 'b5': r.b5
+    };
+    Object.keys(campos).forEach(id => {
+      const el = document.getElementById(id);
+      if (el && campos[id]) el.value = campos[id];
+    });
+
+    if (r.a1q2) {
+      const input = document.querySelector('input[name="a1q2"][value="' + r.a1q2 + '"]');
+      if (input) {
+        input.checked = true;
+        input.closest('.likert-option')?.classList.add('selected');
+      }
+    }
+  }
+
+  // Build dots
+  const dotsContainer = document.getElementById('stepDots');
+  for (let i = 1; i <= TOTAL_PAGES; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i === 1 ? ' active' : '');
+    d.id = 'dot-' + i;
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n) {
+    document.getElementById('page-' + currentPage).classList.remove('active');
+    document.getElementById('dot-' + currentPage).classList.remove('active');
+    document.getElementById('dot-' + currentPage).classList.add('done');
+    currentPage = n;
+    document.getElementById('page-' + n).classList.add('active');
+    document.getElementById('dot-' + n).classList.add('active');
+    document.getElementById('dot-' + n).classList.remove('done');
+    document.getElementById('stepLabel').textContent = 'Etapa ' + n + ' de ' + TOTAL_PAGES;
+    document.getElementById('progressBar').style.width = ((n / TOTAL_PAGES) * 100) + '%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    autosave();
+  }
+
+  function selectLikert(el, name, val) {
+    document.querySelectorAll('[onclick*="' + name + '"]').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function aceitarTCLE() {
+    const nome = document.getElementById('tcle-nome').value.trim();
+    if (!nome) {
+      alert('Por favor, informe seu nome completo para confirmar sua participação.');
+      return;
+    }
+    goTo(3);
+  }
+
+  function validarIdentificacao() {
+    const tempo = document.getElementById('ident-tempo').value.trim();
+    const anoturma = document.getElementById('ident-anoturma').value.trim();
+    const formacao = document.getElementById('ident-formacao').value.trim();
+    if (!tempo || !anoturma || !formacao) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+    goTo(4);
+  }
+
+  /* ============================================================
+     VALIDAÇÃO DE CAMPOS OBRIGATÓRIOS — Blocos A1 a A4 e B
+     Marca visualmente (borda vermelha) os campos vazios e impede
+     o avanço/envio até que todos estejam preenchidos.
+  ============================================================ */
+  function validarCamposObrigatorios(ids) {
+    let todosPreenchidos = true;
+    let primeiroVazio = null;
+
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const vazio = !el.value || !el.value.trim();
+      el.classList.toggle('campo-erro', vazio);
+      if (vazio) {
+        todosPreenchidos = false;
+        if (!primeiroVazio) primeiroVazio = el;
+      }
+    });
+
+    if (!todosPreenchidos) {
+      alert('Por favor, preencha todos os campos antes de continuar.');
+      if (primeiroVazio) primeiroVazio.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    return todosPreenchidos;
+  }
+
+  function validarLikertObrigatorio(name) {
+    const marcado = document.querySelector('input[name="' + name + '"]:checked');
+    if (!marcado) {
+      alert('Por favor, selecione uma opção antes de continuar.');
+      return false;
+    }
+    return true;
+  }
+
+  function validarSecaoA1() {
+    const camposOk = validarCamposObrigatorios(['a1q1', 'a1q3']);
+    const likertOk = validarLikertObrigatorio('a1q2');
+    if (!camposOk || !likertOk) return;
+    goTo(5);
+  }
+
+  function validarSecaoA2() {
+    if (!validarCamposObrigatorios(['a2q1', 'a2q2'])) return;
+    goTo(6);
+  }
+
+  function validarSecaoA3() {
+    if (!validarCamposObrigatorios(['a3q1', 'a3q2', 'a3q3'])) return;
+    goTo(7);
+  }
+
+  function validarSecaoA4() {
+    if (!validarCamposObrigatorios(['a4q1', 'a4q2', 'a4q3'])) return;
+    goTo(8);
+  }
+
+  function validarSecaoBEEnviar() {
+    if (!validarCamposObrigatorios(['b1', 'b2', 'b3', 'b4', 'b5'])) return;
+    enviarFormulario();
+  }
+
+  // Remove o destaque vermelho assim que o usuário corrige o campo
+  document.addEventListener('input', (e) => {
+    if (e.target.classList.contains('campo-erro') && e.target.value.trim()) {
+      e.target.classList.remove('campo-erro');
+    }
+  });
+  document.addEventListener('change', (e) => {
+    if (e.target.name === 'a1q2') {
+      document.querySelectorAll('input[name="a1q2"]').forEach(r => {
+        r.closest('.likert-option')?.classList.remove('campo-erro');
+      });
+    }
+  });
+
+  async function enviarFormulario() {
+  const data = coletarRespostas();
+  const btnEnviar = document.querySelector('#page-8 .btn-accept');
+  if (btnEnviar) { btnEnviar.disabled = true; btnEnviar.textContent = 'Enviando...'; }
+
+  try {
+    const resp = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'submit',
+        token: currentToken,
+        participanteId: participanteId,
+        respostas: data
+      })
+    });
+    const resultado = await resp.json();
+
+    if (!resultado.ok) {
+      alert('Não foi possível enviar suas respostas: ' + (resultado.erro || 'erro desconhecido') + '\n\nSeu progresso continua salvo — tente novamente em instantes.');
+      if (btnEnviar) { btnEnviar.disabled = false; btnEnviar.textContent = '✓ Enviar Respostas'; }
+      return;
+    }
+
+    sessionStorage.removeItem('pesquisa_token');
+    sessionStorage.removeItem('pesquisa_participante');
+    goTo(9);
+
+  } catch (err) {
+    alert('Erro de conexão ao enviar suas respostas. Verifique sua internet e tente novamente — seu progresso já está salvo.');
+    if (btnEnviar) { btnEnviar.disabled = false; btnEnviar.textContent = '✓ Enviar Respostas'; }
+  }
+}
+</script>
+</body>
+</html>
